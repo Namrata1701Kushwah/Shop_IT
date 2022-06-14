@@ -6,21 +6,24 @@ import { Fragment } from 'react';
 
 const ProtectedRoute = ({ component: Component, ...rest }) => {
     const { isAuthenticated, loading, user } = useSelector(state => state.auth)
+    console.log("data auth",loading, user?.role);
     return (
         <Fragment>
-            {loading === false && (
-                <Route
-                    {...rest}
-                    render={props => {
-                        if (isAuthenticated === false) {
-                            return <Redirect to="/login" />
-                        }
-                        return  <Component {...props} />
-                    }}
-                />
-            )}
+        {loading === false && (
+            <Route
+                {...rest}
+                render={props => {
+                    if (isAuthenticated === false) {
+                        return <Redirect to='/login' />
+                    }
 
-        </Fragment>
+                   
+
+                    return <Component {...props} />
+                }}
+            />
+        )}
+    </Fragment>
 
 
     )

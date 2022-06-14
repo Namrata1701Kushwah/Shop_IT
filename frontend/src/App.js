@@ -15,14 +15,38 @@ import ForgotPassword from './components/user/ForgotPassword';
 import NewPassword from './components/user/NewPassword';
 import Cart from './components/cart/Cart';
 import Shipping from './components/cart/Shipping';
+import ConfirmOrder from './components/cart/ConfirmOrder';
+import Payment from './components/cart/Payment'
+import OrderSuccess from './components/cart/OrderSuccess'
+import ListOrders from './components/order/ListOrders';
 import store from './store'
-import { useEffect } from 'react';
+import axios from 'axios'
+import { useEffect ,useState} from 'react';
 
+
+
+//Payments
+import {Elements}  from '@stripe/react-stripe-js'
+import {loadStripe}  from '@stripe/stripe-js'
+import OrderDetails from './components/order/OrderDetails';
 
 function App() {
 
+  const [stripeApiKey, setStripeApiKey] = useState()
+
+
+
   useEffect(()=>{
         store.dispatch(loadUser())
+
+        async function getStripApiKey() {
+          const { data } = await axios.get('/api/v1/stripeapi');
+          console.log(data.stripeApiKey)
+    
+          setStripeApiKey(data.stripeApiKey)
+        }
+    
+        getStripApiKey();
   },[])
   return (
     <Router>
@@ -33,7 +57,14 @@ function App() {
       <Route path="/search/:keyword" component={Home}/>
       <Route path="/product/:id" component={ProductDetails} exact/>
       <Route path="/cart" component={Cart} exact/>
-      <ProtectedRoute path="/ship" component={Shipping} exact/>
+      <ProtectedRoute path="/ship" component={Shipping} />
+      <ProtectedRoute path="/order/confirm" component={ConfirmOrder} />
+      <ProtectedRoute path="/success" component={OrderSuccess}/>
+      {stripeApiKey &&
+           <Elements stripe={loadStripe(stripeApiKey)}>
+             <ProtectedRoute path = "/payment" component={Payment} />
+           </Elements>
+           }
 
       <Route path ="/login" component={Login} />
       <Route path ="/register" component={Register} />
@@ -42,6 +73,9 @@ function App() {
       <ProtectedRoute path ="/me" component={Profile} exact/>
       <ProtectedRoute path ="/me/update" component={UpdateProfile} exact/>
       <ProtectedRoute path ="/password/update" component={UpdatePassword} exact/>
+      <ProtectedRoute path ="/orders/me" component={ListOrders} exact/>
+      <ProtectedRoute path ="/order/:id" component={OrderDetails} exact/>`
+   
       </div>
      
       <Footer/>

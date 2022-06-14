@@ -92,7 +92,6 @@ export const register = (userData) => async (dispatch) => {
 }
 
 //Load User 
-
 export const loadUser = () => async (dispatch) => {
     try {
 
@@ -108,11 +107,10 @@ export const loadUser = () => async (dispatch) => {
     } catch (error) {
         dispatch({
             type: LOAD_USER_FAIL,
-            payload: error.response.data.message
+            payload: error?.response?.data?.message
         })
     }
 }
-
 
 //Update Profile
 

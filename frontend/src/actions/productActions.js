@@ -3,10 +3,15 @@ import {
     ALL_PRODUCTS_REQUEST , 
     ALL_PRODUCTS_SUCCESS, 
     ALL_PRODUCTS_FAIL,
-    CLEAR_ERRORS, 
+    
     PRODUCT_DETAILS_SUCCESS,
     PRODUCT_DETAILS_REQUEST,
-    PRODUCT_DETAILS_FAIL
+    PRODUCT_DETAILS_FAIL,
+    NEW_REVIEW_REQUEST,
+    NEW_REVIEW_SUCCESS,
+    NEW_REVIEW_RESET,
+    NEW_REVIEW_FAIL,
+    CLEAR_ERRORS
 } from  '../constants/productConstants'
 
 
@@ -56,6 +61,32 @@ export const getProductDetails = (id)=> async(dispatch)=>{
     } catch (error) {
         dispatch({
             type : PRODUCT_DETAILS_FAIL,
+            payload : error.response.data.message
+        })
+        
+    }
+}
+
+export const newReview = (reviewData)=> async(dispatch)=>{
+    debugger
+    try {
+        dispatch({type :NEW_REVIEW_REQUEST})
+
+        const config = {
+            headers : {
+                'Content-Type' : "application/json"
+            }
+        }
+        const {data} = await axios.put(`/api/v1/review`, reviewData, config)
+        console.log("}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}}",data);
+        dispatch({
+            type:NEW_REVIEW_SUCCESS,
+            payload:data.success
+        })
+        
+    } catch (error) {
+        dispatch({
+            type : NEW_REVIEW_FAIL,
             payload : error.response.data.message
         })
         
