@@ -6,7 +6,8 @@ import Loader from '../layouts/Loader'
 
 import { useAlert } from 'react-alert'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAdminProducts, clearErrors } from '../../actions/productActions'
+import { getAdminProducts, clearErrors, deleteProduct } from '../../actions/productActions'
+import { DELETE_PRODUCT_RESET } from '../../constants/productConstants'
 import Sidebar from './Sidebar'
 
 
@@ -18,6 +19,7 @@ const ProductList = ({ history }) => {
     const dispatch = useDispatch();
 
     const { loading, error, products } = useSelector(state => state?.products);
+    const {error:deleteErrror, isDeleted} = useSelector(state=>state.product)
 
     useEffect(() => {
         dispatch(getAdminProducts());
@@ -26,7 +28,18 @@ const ProductList = ({ history }) => {
             alert.error(error);
             dispatch(clearErrors())
         }
-    }, [dispatch, alert, error])
+
+        if (deleteErrror) {
+            alert.deleteErrror(error);
+            dispatch(clearErrors())
+        }
+        if(isDeleted){
+            alert.success("Product Deleted Successfully")
+            history.push("/admin/products")
+            dispatch({type : 'DELETE_PRODUCT_RESET '})
+        }
+
+    }, [dispatch, alert, error ,deleteErrror, isDeleted, history])
 
     const setProducts = () => {
         const data = {
@@ -72,7 +85,7 @@ const ProductList = ({ history }) => {
                             <i className='fa fa-pencil'></i>
                         </Link>
 
-                        <button style={{marginLeft: "45px", marginTop: "-60px"}} className='btn btn-danger py-1 px-6 ml-7' >
+                        <button style={{marginLeft: "45px", marginTop: "-60px"}} className='btn btn-danger py-1 px-6 ml-7' onClick={()=>deleteProductHandler(product._id)} >
                             <i className='fa fa-trash'></i>
                         </button>
                     </Fragment>
@@ -81,6 +94,11 @@ const ProductList = ({ history }) => {
         })
 
         return data;
+    }
+
+
+    const deleteProductHandler = (id)=>{
+        dispatch(deleteProduct(id))
     }
 // console.log("KKKKKKKK",products);
     return (

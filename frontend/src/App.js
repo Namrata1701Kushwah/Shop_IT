@@ -22,6 +22,9 @@ import OrderSuccess from './components/cart/OrderSuccess'
 import ListOrders from './components/order/ListOrders';
 import Dashboard from './components/admin/Dashboard';
 import NewProduct from './components/admin/NewProduct';
+import UpdateProduct from './components/admin/UpdateProduct';
+import OrderList from './components/admin/OrderList';
+import ProcessOrder from './components/admin/ProcessOrder'
 import store from './store'
 import axios from 'axios'
 import { useEffect, useState } from 'react';
@@ -84,7 +87,11 @@ function App() {
           <ProtectedRoute path="/order/:id" component={OrderDetails} exact />
           <ProtectedRoute path="/dashboard" isAdmin={true} component={Dashboard} exact />
           <ProtectedRoute path="/admin/products" isAdmin={true} component={ProductList} exact />
+          <ProtectedRoute path="/admin/orders" isAdmin={true} component={OrderList} exact />
           <ProtectedRoute path="/admin/product" isAdmin={true} component={NewProduct} exact />
+          <ProtectedRoute path="/admin/product/:id" isAdmin={true} component={UpdateProduct} exact />
+          <ProtectedRoute path="/admin/order/:id" isAdmin={true} component={ProcessOrder} exact />
+
 
         </div>
        {!loading && user.role !== 'admin' && (

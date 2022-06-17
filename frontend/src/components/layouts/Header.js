@@ -49,7 +49,7 @@ const Header = () => {
                                 type="button" id="dropDownMenuButton" data-toggle='dropdown'
                                 area-aria-haspopup="true" aria-expanded="false">
 
-                                <figure clasName="avatar.avatar-nav">
+                                <figure className="avatar.avatar-nav">
                                     <img src={user.avatar && user.avatar.url} 
                                         alt={user && user.name}
                                         className="rounded-circle"
