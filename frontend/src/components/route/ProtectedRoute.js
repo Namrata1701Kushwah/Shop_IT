@@ -4,7 +4,7 @@ import { Fragment } from 'react';
 
 
 
-const ProtectedRoute = ({ component: Component, ...rest }) => {
+const ProtectedRoute = ({isAdmin, component: Component, ...rest }) => {
     const { isAuthenticated, loading, user } = useSelector(state => state.auth)
     console.log("data auth",loading, user?.role);
     return (
@@ -16,7 +16,10 @@ const ProtectedRoute = ({ component: Component, ...rest }) => {
                     if (isAuthenticated === false) {
                         return <Redirect to='/login' />
                     }
-
+                  
+                    if(isAdmin == true && user.role !== 'admin'){
+                        return <Redirect to ="/" />
+                    }
                    
 
                     return <Component {...props} />

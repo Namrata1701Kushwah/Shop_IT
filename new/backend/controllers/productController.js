@@ -3,10 +3,28 @@ const Product = require("../models/product");
 const ErrorHandler = require('../utils/errorHandler');
 const catchAsyncErrors = require('../middlewares/catchAsyncErrors')
 const APIFeatures = require('../utils/apiFeatures');
+const cloudinary = require('cloudinary')
 const { query } = require("express");
 
 exports.newProduct = catchAsyncErrors(async (req, res, next) => {
+let images = []
+if(typeof req.body.images === 'string'){
+  images.push(req.body.images)
+}else{
+  images = req.body.images
+}
+ let imagesLinks = [];
+ for (let i=0; i<images.length;i++){
+   const result = await cloudinary.v2.uploader.upload (images[i],{
+     folder:'products'
+   });
+   imagesLinks.push({
+     public_id : result.public_id,
+     url : result.secure_url
+   })
+ }
 
+  req.body.images = imagesLinks
   req.body.user = req.user.id;
 
   const product = await Product.create(req.body);
@@ -16,6 +34,8 @@ exports.newProduct = catchAsyncErrors(async (req, res, next) => {
   });
 });
 
+
+//get all product
 exports.getProducts = catchAsyncErrors(async (req, res, next) => {
 
 
@@ -25,13 +45,13 @@ exports.getProducts = catchAsyncErrors(async (req, res, next) => {
   const apiFeatures = new APIFeatures(Product.find(), req.query)
     .search()
     .filter()
-    // .pagination(resPerPage)
+  // .pagination(resPerPage)
 
-    let products = await apiFeatures.query
-    let filteredProductsCount = products.length
+  let products = await apiFeatures.query
+  let filteredProductsCount = products.length
 
 
-    apiFeatures.pagination(resPerPage)
+  apiFeatures.pagination(resPerPage)
 
 
 
@@ -46,6 +66,22 @@ exports.getProducts = catchAsyncErrors(async (req, res, next) => {
 
 
 });
+
+//get all product (Admin) => /api/v1/admin/products
+exports.getAdminProducts = catchAsyncErrors(async (req, res, next) => {
+
+   const products = await Product.find()
+
+   res.status(200).json({
+    success: true,
+    products,
+   
+  });
+
+
+});
+
+//single product
 exports.getSingleProduct = catchAsyncErrors(async (req, res, next) => {
   const product = await Product.findById(req.params.id);
   if (!product) {
@@ -85,6 +121,9 @@ exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
     rating: Number(rating),
     comment
   }
+  console.log(review);
+
+
   const product = await Product.findById(productId);
   const isReviewed = product.reviews.find(
     r => r.user.toString() === req.user._id.toString()
@@ -94,6 +133,7 @@ exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
       if (review.user.toString() === req.user._id.toString()) {
         review.comment = comment;
         review.rating = rating;
+        console.log("===============",review.comment);
       }
     })
 
@@ -103,6 +143,7 @@ exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
     product.numOfReviews = product.reviews.length
   }
   product.rating = product.reviews.reduce((acc, item) => item.rating + acc, 0) / product.reviews.length
+  // console.log(">>>>>>>>>>>",product.reviews.rating);
 
   await product.save({ validateBeforeSave: false });
   res.status(200).json({
@@ -134,7 +175,9 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
 })
 // &price[lte]=1&price[gte]=0
 exports.getProductReviews = catchAsyncErrors(async (req, res, next) => {
+
   const product = await Product.findById(req.query.id);
+
   res.status(200).json({
     success: true,
     reviews: product.reviews

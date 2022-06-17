@@ -4,6 +4,7 @@ const router = express.Router();
 
 const {
   getProducts,
+  getAdminProducts,
   newProduct,
   getSingleProduct,
   updateProduct,
@@ -17,7 +18,9 @@ const {isAuthenticatedUser, authorizeRoles}=require('../middlewares/auth');
 const { seedProducts } = require("../utils/seeder");
 
 router.route("/products").get(getProducts);
+router.route("/admin/products").get(getAdminProducts);
 // router.route("/products").get(isAuthenticatedUser,getProducts);
+router.route('/admin/product/new').post(isAuthenticatedUser, authorizeRoles('admin'),newProduct)
 
 router.route("/product/:id").get(getSingleProduct);
 router.route("/admin/product/new").post(isAuthenticatedUser,authorizeRoles('admin'),seedProducts);

@@ -8,28 +8,25 @@ import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { getProductDetails, clearErrors, newReview } from "../../actions/productActions";
 import { addItemToCart } from "../../actions/cartActions";
-import {
- 
-    NEW_REVIEW_RESET,
-    
-  
-} from  '../../constants/productConstants'
+import { NEW_REVIEW_RESET } from '../../constants/productConstants'
 import ListReviews from "../review/ListReviews";
 
 
 const ProductDetails = ({ match }) => {
 
-    const[quantity , setQuantity] =  useState(1)
-    const [rating,setRating] = useState(0)
-    const [comment, setComment] =useState('')
+    const [quantity, setQuantity] = useState(1)
+    const [rating, setRating] = useState(0)
+    const [comment, setComment] = useState('')
 
     const dispatch = useDispatch();
     const alert = useAlert();
 
     const { product, loading, error } = useSelector(state => state.productDetails)
-    const {error : reviewError, success} = useSelector(state=>state.newReview)
-    const {user} = useSelector((state)=>state.auth)
-    console.log(">>>",product);
+
+    console.log(">>>>>>>>>>>>>>>>>>>>", product?.product?.reviews[1]?.rating);
+
+    const { error: reviewError, success } = useSelector(state => state.newReview)
+    const { user } = useSelector((state) => state.auth)
     useEffect(() => {
         dispatch(getProductDetails(match.params.id))
         if (error) {
@@ -42,18 +39,18 @@ const ProductDetails = ({ match }) => {
             dispatch(clearErrors())
         }
 
-        if(success){
-           alert.success('Review Posted successfully')
-           dispatch({type : NEW_REVIEW_RESET})
+        if (success) {
+            alert.success('Review Posted successfully')
+            dispatch({ type: NEW_REVIEW_RESET })
         }
-    },[match.params.id, error,reviewError, alert,success, dispatch])
+    }, [match.params.id, error, reviewError, alert, success, dispatch])
 
 
-     const addToCart = ()=>{
-         dispatch(addItemToCart(match.params.id, quantity));
-         alert.success('Item Added to Cart')
-     }
-    
+    const addToCart = () => {
+        dispatch(addItemToCart(match.params.id, quantity));
+        alert.success('Item Added to Cart')
+    }
+
 
     const increaseQty = () => {
         const count = document.querySelector('.count')
@@ -71,85 +68,87 @@ const ProductDetails = ({ match }) => {
         if (count.valueAsNumber <= 1) return;
 
         const qty = count.valueAsNumber - 1;
-        setQuantity(qty)        
+        setQuantity(qty)
 
     }
 
 
 
 
-const setUserRatings = ()=>{
-    const stars = document.querySelectorAll('.star')
+    const setUserRatings = () => {
+        const stars = document.querySelectorAll('.star')
 
-    stars.forEach((star ,index) => {
-               star.starValue = index + 1;
+        stars.forEach((star, index) => {
+            star.starValue = index + 1;
 
-               ['click', 'mouseover', 'mouseout'].forEach(function(e){
-                   star.addEventListener(e,showRatings);
-               })
-    })
+            ['click', 'mouseover', 'mouseout'].forEach(function (e) {
+                star.addEventListener(e, showRatings);
+            })
+        })
 
-    function showRatings(e){
-        stars.forEach((star,index)=>{
-            if(e.type === 'click') {
-                if(index < this.starValue)
-                {
-                    star.classList.add('orange');
-                    setRating(this.starValue)
-                }else{
-                    star.classList.remove('orange');
+
+        function showRatings(e) {
+            stars.forEach((star, index) => {
+                if (e.type === 'click') {
+                    if (index < this.starValue) {
+                        star.classList.add('orange');
+                        setRating(this.starValue)
+                    } else {
+                        star.classList.remove('orange');
+                    }
+
+
                 }
-               
+                if (e.type === 'mouseover') {
+                    if (index < this.starValue) {
+                        star.classList.add('yellow');
+                    } else {
+                        star.classList.remove('yellow');
+                    }
 
-            }
-            if(e.type === 'mouseover') {
-                if(index < this.starValue)
-                {
-                    star.classList.add('yellow');
-                }else{
+                }
+                if (e.type === 'mouseout') {
                     star.classList.remove('yellow');
                 }
-                
-            }
-            if(e.type === 'mouseout') {
-                star.classList.remove('yellow');
-            }
-        })
+            })
+        }
     }
-}
 
-const reviewHandler = () =>{
-    const formData = new FormData()
+    const reviewHandler = () => {
 
-    formData.set('rating',rating);
-    formData.set('comment',comment);
-    formData.set('productId',match.params.id);
-//    console.log(">>>>>>>>");
+        const formData = new FormData()
 
-    dispatch(newReview(formData));
-    console.log("formData",formData);
-}
+        formData.set('rating', rating);
+        formData.set('comment', comment);
+        formData.set('productId', match.params.id);
+
+
+        dispatch(newReview(formData));
+        console.log("formData", formData);
+        // alert.success("asdfhagsdfhg")
+
+    }
 
     return (
-      
+
 
 
         <Fragment>
             {loading ? <Loader /> : (
                 <Fragment>
                     <MetaData title={product?.product?.name} />
-                    {console.log("nameeeeeeeeeeeeeeeeee",product?.product?.name)}
+                    {/* {console.log("nameeeeeeeeeeeeeeeeee",product?.product?.name)} */}
                     <div className="row d-flex justify-content-around">
                         <div className="col-12 col-lg-5 img-fluid" id="product_image">
-                        { console.log( product.product )}
-                             <Carousel pause='hover'>
-                                { product?.product?.images?.map(image =>(
+                            {console.log(<h1>product.product?.reviews[1]?.comment</h1>)}
+                            <Carousel pause='hover'>
+                                {product?.product?.images?.map(image => (
                                     <Carousel.Item key={image.pubic_id}>
                                         <img className="d-block w-100" src={image.url} alt={product.title} />
-                                    </Carousel.Item> 
-                                    ))}
-                                    
-                                    
+                                    </Carousel.Item>
+                                ))}
+
+
                             </Carousel>
                         </div>
 
@@ -160,7 +159,7 @@ const reviewHandler = () =>{
                             <hr />
 
                             <div className="rating-outer">
-                                <div className="rating-inner" style={{ width: `${(product?.product?.ratings / 5) * 100}%` }}></div>
+                                <div className="rating-inner" style={{ width: `${(product?.product?.reviews?.[0]?.rating / 5) * 100}%` }}></div>
                             </div>
                             <span id="no_of_reviews">({product?.product?.numOfReviews} Reviews)</span>
 
@@ -186,6 +185,10 @@ const reviewHandler = () =>{
                             <p>{product?.product?.description}</p>
                             <hr />
                             <p id="product_seller mb-3">Sold by: <strong>{product?.product?.seller}</strong></p>
+
+
+                            {/* 
+                            <h1>{product.product?.reviews[1]?.comment}</h1> */}
 
                             {user ? <button id="review_btn" type="button" className="btn btn-primary mt-4" data-toggle="modal" data-target="#ratingModal" onClick={setUserRatings}>
                                 Submit Your Review
@@ -238,10 +241,33 @@ const reviewHandler = () =>{
                         </div>
                     </div>
 
-                    {product.reviews && product.reviews.length > 0 && (
-                      <ListReviews reviews = {product.reviews} />
+                    {/* {product?.reviews && product?.reviews?.length > 0 && (
+                      <ListReviews reviews = {product?.reviews} />
                           
                         
+                    )} */}
+
+                    {/* {product?.product?.reviews && product?.product?.reviews?.length  > 0 && (
+                      <ListReviews reviews = {product?.reviews} />
+                          
+                        
+                    )} */}
+
+                    {product?.product?.reviews && product?.product?.reviews?.length > 0 && (
+                        product?.product?.reviews?.map(review => (
+                            <>
+                                <div className="rating-outer">
+                                    <div className="rating-inner" style={{ width: `${(review?.rating / 5) * 100}%` }}></div>
+                                </div>
+                                <p> {review?.name}</p>
+
+
+                                <p>{review?.comment}</p>
+                                <hr />
+
+                            </>
+
+                        ))
                     )}
 
                 </Fragment>
