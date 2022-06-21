@@ -22,8 +22,10 @@ const ProductDetails = ({ match }) => {
     const alert = useAlert();
 
     const { product, loading, error } = useSelector(state => state.productDetails)
+    // console.log("??????//", product);
+    
 
-    console.log(">>>>>>>>>>>>>>>>>>>>", product?.product?.reviews[1]?.rating);
+    // console.log(">>>>>>>>>>>>>>>>>>>>", product);
 
     const { error: reviewError, success } = useSelector(state => state.newReview)
     const { user } = useSelector((state) => state.auth)
@@ -55,7 +57,7 @@ const ProductDetails = ({ match }) => {
     const increaseQty = () => {
         const count = document.querySelector('.count')
 
-        if (count.valueAsNumber >= product.product.stock) return;
+        if (count.valueAsNumber >= product.stock) return;
 
         const qty = count.valueAsNumber + 1;
         setQuantity(qty)
@@ -71,8 +73,6 @@ const ProductDetails = ({ match }) => {
         setQuantity(qty)
 
     }
-
-
 
 
     const setUserRatings = () => {
@@ -136,15 +136,15 @@ const ProductDetails = ({ match }) => {
         <Fragment>
             {loading ? <Loader /> : (
                 <Fragment>
-                    <MetaData title={product?.product?.name} />
+                    <MetaData title={product?.name} />
                     {/* {console.log("nameeeeeeeeeeeeeeeeee",product?.product?.name)} */}
                     <div className="row d-flex justify-content-around">
                         <div className="col-12 col-lg-5 img-fluid" id="product_image">
-                            {console.log(<h1>product.product?.reviews[1]?.comment</h1>)}
+                            {/* {console.log(<h1>product?.reviews[1]?.comment</h1>)} */}
                             <Carousel pause='hover'>
-                                {product?.product?.images?.map(image => (
-                                    <Carousel.Item key={image.pubic_id}>
-                                        <img className="d-block w-100" src={image.url} alt={product.title} />
+                                {product?.images?.map(image => (
+                                    <Carousel.Item key={image?.pubic_id}>
+                                        <img className="d-block w-100" src={image.url} alt={product?.title} />
                                     </Carousel.Item>
                                 ))}
 
@@ -153,19 +153,19 @@ const ProductDetails = ({ match }) => {
                         </div>
 
                         <div className="col-12 col-lg-5 mt-5">
-                            <h3>{product?.product?.name}</h3>
-                            <p id="product_id">Product # {product?.product?._id}</p>
+                            <h3>{product?.name}</h3>
+                            <p id="product_id">Product # {product?._id}</p>
 
                             <hr />
 
                             <div className="rating-outer">
-                                <div className="rating-inner" style={{ width: `${(product?.product?.reviews?.[0]?.rating / 5) * 100}%` }}></div>
+                                <div className="rating-inner" style={{ width: `${(product?.reviews?.[0]?.rating / 5) * 100}%` }}></div>
                             </div>
-                            <span id="no_of_reviews">({product?.product?.numOfReviews} Reviews)</span>
+                            <span id="no_of_reviews">({product?.numOfReviews} Reviews)</span>
 
                             <hr />
 
-                            <p id="product_price">${product?.product?.price}</p>
+                            <p id="product_price">${product?.price}</p>
                             <div className="stockCounter d-inline">
                                 <span className="btn btn-danger minus" onClick={decreaseQty}>-</span>
 
@@ -173,18 +173,18 @@ const ProductDetails = ({ match }) => {
 
                                 <span className="btn btn-primary plus" onClick={increaseQty}>+</span>
                             </div>
-                            <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" disabled={product?.product?.stock === 0} onClick={addToCart}>Add to Cart</button>
+                            <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" disabled={ product?.stock === 0} onClick={addToCart}>Add to Cart</button>
 
                             <hr />
 
-                            <p>Status: <span id="stock_status" className={product?.product?.stock > 0 ? 'greenColor' : 'redColor'} >{product?.product?.stock > 0 ? 'In Stock' : 'Out of Stock'}</span></p>
+                            <p>Status: <span id="stock_status" className={product?.stock > 0 ? 'greenColor' : 'redColor'} >{product?.stock > 0 ? 'In Stock' : 'Out of Stock'}</span></p>
 
                             <hr />
 
                             <h4 className="mt-2">Description:</h4>
-                            <p>{product?.product?.description}</p>
+                            <p>{product?.description}</p>
                             <hr />
-                            <p id="product_seller mb-3">Sold by: <strong>{product?.product?.seller}</strong></p>
+                            <p id="product_seller mb-3">Sold by: <strong>{product?.seller}</strong></p>
 
 
                             {/* 
@@ -253,8 +253,8 @@ const ProductDetails = ({ match }) => {
                         
                     )} */}
 
-                    {product?.product?.reviews && product?.product?.reviews?.length > 0 && (
-                        product?.product?.reviews?.map(review => (
+                    {product?.reviews && product?.reviews?.length > 0 && (
+                       product?.reviews?.map(review => (
                             <>
                                 <div className="rating-outer">
                                     <div className="rating-inner" style={{ width: `${(review?.rating / 5) * 100}%` }}></div>
@@ -284,3 +284,6 @@ const ProductDetails = ({ match }) => {
 
 
 export default ProductDetails;
+
+
+

@@ -45,7 +45,7 @@ const UpdateProduct = ({ match, history }) => {
     const productId = match.params.id;
 
     useEffect(() => {
-        debugger
+
         if (product && product._id !== productId) {
             dispatch(getProductDetails(productId));
         } else {

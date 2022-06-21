@@ -109,7 +109,7 @@ const Home = ({ match }) => {
                                                 </h4>
 
                                                 <ul className="pl-0">
-                                                    {categories.map(category => (
+                                                    {categories?.map(category => (
                                                         <li
                                                             style={{
                                                                 cursor: 'pointer',
@@ -133,7 +133,7 @@ const Home = ({ match }) => {
                                                 </h4>
 
                                                 <ul className="pl-0">
-                                                    {[5, 4, 3, 2, 1].map(star => (
+                                                    {[5, 4, 3, 2, 1]?.map(star => (
                                                         <li
                                                             style={{
                                                                 cursor: 'pointer',
@@ -169,16 +169,16 @@ const Home = ({ match }) => {
 
                                     <div className="col-6 col-md-9">
                                         <div className="row">
-                                            {products.map(product => (
-                                                <Product key={product._id} product={product} col={4} />
+                                            {products?.map(product => (
+                                                <Product key={product?._id} product={product} col={4} />
                                             ))}
                                         </div>
 
                                     </div>
                                 </Fragment>
                             ) : (
-                                products.map(product => (
-                                    <Product key={product._id} product={product} />
+                                products?.map(product => (
+                                    <Product key={product?._id} product={product} />
                                 ))
 
 
@@ -216,6 +216,7 @@ const Home = ({ match }) => {
             )}
 
         </Fragment>
+        
     )
 }
 

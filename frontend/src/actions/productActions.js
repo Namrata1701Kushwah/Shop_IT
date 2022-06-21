@@ -30,6 +30,10 @@ import {
     NEW_PRODUCT_SUCCESS,
 
     NEW_PRODUCT_FAIL,
+    DELETE_REVIEW_REQUEST,
+    DELETE_REVIEW_SUCCESS,
+    DELETE_REVIEW_RESET,
+    DELETE_REVIEW_FAIL,
     CLEAR_ERRORS
 } from '../constants/productConstants'
 
@@ -91,7 +95,7 @@ export const getProductReviews = (id) => async (dispatch) => {
     try {
         dispatch({ type: GET_REVIEWS_REQUEST })
         const { data } = await axios.get(`/api/v1/reviews?id=${id}`)
-        // console.log("NNNNNNNNNNNNNNNNNN", data)
+      
         dispatch({
             type: GET_REVIEWS_SUCCESS,
             payload: data.reviews
@@ -232,6 +236,28 @@ export const getAdminProducts = () => async (dispatch) => {
     }
 }
 
+
+// Delete product reviews
+export const deleteReviews = (id,productId) => async (dispatch) => {
+    try {
+        dispatch({ type: DELETE_REVIEW_REQUEST })
+        const { data } = await axios.delete(`/api/v1/reviews?id=${id}&productId=${productId}`)
+     
+
+        // const { data } = await axios.delete(`/api/v1/admin/product/${id}`)
+      
+        dispatch({
+            type: DELETE_REVIEW_SUCCESS,
+            payload: data.success
+        })
+    } catch (error) {
+        
+        dispatch({
+            type: DELETE_REVIEW_FAIL,
+            payload: error.response.data.message
+        })
+    }
+}
 
 
 //Clear Error
