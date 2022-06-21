@@ -44,6 +44,7 @@ const Home = ({ match }) => {
 
     const { loading, products, error, resPerPage, productsCount, filteredProductsCount } = useSelector(state => state.products)
 
+
     const keyword = match.params.keyword
 
 
@@ -169,6 +170,7 @@ const Home = ({ match }) => {
 
                                     <div className="col-6 col-md-9">
                                         <div className="row">
+                                    
                                             {products?.map(product => (
                                                 <Product key={product?._id} product={product} col={4} />
                                             ))}

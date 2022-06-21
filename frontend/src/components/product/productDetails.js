@@ -23,7 +23,7 @@ const ProductDetails = ({ match }) => {
 
     const { product, loading, error } = useSelector(state => state.productDetails)
     // console.log("??????//", product);
-    
+
 
     // console.log(">>>>>>>>>>>>>>>>>>>>", product);
 
@@ -158,8 +158,10 @@ const ProductDetails = ({ match }) => {
 
                             <hr />
 
+                            {console.log("abcd", product?.reviews)}
+
                             <div className="rating-outer">
-                                <div className="rating-inner" style={{ width: `${(product?.reviews?.[0]?.rating / 5) * 100}%` }}></div>
+                                <div className="rating-inner" style={{ width: `${(product?.ratings / 5) * 100}%` }}></div>
                             </div>
                             <span id="no_of_reviews">({product?.numOfReviews} Reviews)</span>
 
@@ -173,7 +175,7 @@ const ProductDetails = ({ match }) => {
 
                                 <span className="btn btn-primary plus" onClick={increaseQty}>+</span>
                             </div>
-                            <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" disabled={ product?.stock === 0} onClick={addToCart}>Add to Cart</button>
+                            <button type="button" id="cart_btn" className="btn btn-primary d-inline ml-4" disabled={product?.stock === 0} onClick={addToCart}>Add to Cart</button>
 
                             <hr />
 
@@ -254,7 +256,7 @@ const ProductDetails = ({ match }) => {
                     )} */}
 
                     {product?.reviews && product?.reviews?.length > 0 && (
-                       product?.reviews?.map(review => (
+                        product?.reviews?.map(review => (
                             <>
                                 <div className="rating-outer">
                                     <div className="rating-inner" style={{ width: `${(review?.rating / 5) * 100}%` }}></div>

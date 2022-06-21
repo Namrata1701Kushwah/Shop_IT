@@ -6,7 +6,7 @@ import MetaData from "../layouts/MetaData";
 import { useAlert } from "react-alert";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword, clearErrors } from '../../actions/userActions';
-import { UPDATE_PASSWORD_RESET } from "../../constants/userConstants";
+// import { UPDATE_PASSWORD_RESET } from "../../constants/userConstants";
 
 
 
@@ -26,7 +26,7 @@ const NewPassword= ({history , match})=>{
     const dispatch = useDispatch();
 
  
-    const { error, success} = useSelector(state => state.ForgotPassword)
+    const { error, success} = useSelector(state => state.forgotPassword)
 
     useEffect(() => {
 
@@ -53,7 +53,7 @@ const NewPassword= ({history , match})=>{
     
       
 
-        dispatch(resetPassword(match.pasrams.token,formData))
+        dispatch(resetPassword(match.params.token,formData))
     }
 
 

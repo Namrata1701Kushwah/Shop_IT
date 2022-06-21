@@ -28,6 +28,8 @@ const ProtectedRoute = ({isAdmin, component: Component, ...rest }) => {
         )}
     </Fragment>
 
+  
+
 
     )
 }
