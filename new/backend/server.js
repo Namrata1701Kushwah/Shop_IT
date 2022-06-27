@@ -9,6 +9,7 @@ const { seedProducts } = require("./utils/seeder");
 
 
 //setting up config file
+// abfguyeuygfjgbf 
 if(process.env.NODE_ENV !== 'PRODUCTION') require('dotenv').config({ path: "./config/config.env" });
 
 
