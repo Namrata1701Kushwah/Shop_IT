@@ -14,7 +14,7 @@ const path = require("path")
 
 
 //setting up config file
-if(process.env.NODE_ENV !== 'PRODUCTION') require('dotenv').dotenv.config({ path: "./config/config.env" });
+if(process.env.NODE_ENV !== 'PRODUCTION') require('dotenv').config({ path: "./config/config.env" });
 
 // console.log("test",test);
 app.use(bodyparser.urlencoded({ extended : true}));

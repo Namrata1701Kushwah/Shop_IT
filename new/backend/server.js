@@ -9,7 +9,7 @@ const { seedProducts } = require("./utils/seeder");
 
 
 //setting up config file
-if(process.env.NODE_ENV !== 'PRODUCTION') require('dotenv').dotenv.config({ path: "./config/config.env" });
+if(process.env.NODE_ENV !== 'PRODUCTION') require('dotenv').config({ path: "./config/config.env" });
 
 
 process.on('uncaughtException', err => {
