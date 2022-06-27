@@ -8,7 +8,8 @@
     "start": "nodemon server.js",
     "dev": "SET NODE_ENV=DEVELOPMENT& nodemon backend/server",
     "prod": "SET NODE_ENV=PRODUCTION& nodemon backend/server",
-    "seeder": "nodemon backend/utils/seeder.js"
+    "seeder": "nodemon backend/utils/seeder.js",
+    "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "author": "namrata kushwah",
   "license": "ISC",

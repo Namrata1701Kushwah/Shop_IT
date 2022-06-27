@@ -9,17 +9,28 @@ const products = require("./routes/product");
 const auth=require('./routes/auth')
 const payment=require('./routes/payment')
 const order=require('./routes/order')
-const dotenv = require("dotenv");
+// const dotenv = require("dotenv");
+const path = require("path")
 
 
-
-dotenv.config({ path: "./config/config.env" });
+//setting up config file
+if(process.env.NODE_ENV !== 'PRODUCTION') require('dotenv').dotenv.config({ path: "./config/config.env" });
 
 // console.log("test",test);
 app.use(bodyparser.urlencoded({ extended : true}));
 app.use(express.json());
 app.use(cookieParser());
 app.use(fileUpload())
+
+
+if(process.env.NODE_ENV === 'PRODUCION'){
+    app.use(express.static(path.join(__dirname, '../frontend/build')))
+
+    app.get('*', (req,res)=>{
+        res.sendFile(path.resolve(__dirname, '../frontend/build/index.html'))
+    })
+}
+
 
 //Seting up cloudinary config
 // cloudinary.config({
